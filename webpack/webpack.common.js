@@ -1,9 +1,10 @@
 const path = require('path');
-const appDir = '../src/background/';
+const appDir = '../src/';
 
 module.exports = {
     entry: {
-        background: path.join(__dirname, appDir + 'background.ts')
+        background: path.join(__dirname, appDir + '/background/index.ts'),
+        popup: path.join(__dirname, appDir + '/popup/index.ts')
     },
     module: {
         rules: [

@@ -2,7 +2,9 @@ import { autoInjectable, injectable } from "tsyringe";
 
 @injectable()
 class HelloService {
-    constructor() {}
+    constructor() {
+        this.sayHello();
+    }
 
     sayHello() {
         console.log('hello');
