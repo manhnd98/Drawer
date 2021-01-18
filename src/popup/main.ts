@@ -1,40 +1,54 @@
-import { injectable } from "tsyringe";
+import {injectable} from "tsyringe";
+import {fromEvent} from 'rxjs';
 
 @injectable()
 class MainPopup {
-  private readonly editModeEl: HTMLInputElement;
-  private readonly exportBD;
-  private readonly drawLine;
+    private readonly editModeEl: HTMLInputElement;
+    private readonly exportBD;
+    private readonly drawLine;
 
-  constructor() {
-    this.editModeEl = document.getElementById("editMode") as HTMLInputElement;
-    this.exportBD = document.getElementById("exportBD");
-    this.drawLine = document.getElementById("drawLine");
-    this.init();
-  }
-
-  init() {
-    window.onload = () => {
-      this.handleIsEditCheckbox();
-    };
-
-    this.editModeEl.onclick = () => {
-      let isEdit = !JSON.parse(localStorage.getItem("isEditMode"));
-      localStorage.setItem("isEditMode", `${isEdit}`);
-      this.handleIsEditCheckbox();
-
-      this.drawLine.textContent = `${isEdit}`;
-    };
-  }
-
-  handleIsEditCheckbox() {
-    let isEdit = !!localStorage.getItem("isEditMode");
-    if (isEdit) {
-      this.editModeEl.setAttribute("checked", "true");
-    } else {
-      this.editModeEl.removeAttribute("checked");
+    constructor() {
+        this.editModeEl = document.getElementById("editMode") as HTMLInputElement;
+        this.exportBD = document.getElementById("exportBD");
+        this.drawLine = document.getElementById("drawLine");
+        this.init();
     }
-  }
+
+    init() {
+        window.onload = () => {
+            this.handleIsEditCheckbox();
+        };
+
+        this.editModeEl.onclick = () => {
+            let isEdit = !JSON.parse(localStorage.getItem("isEditMode"));
+            localStorage.clear();
+            localStorage.setItem("isEditMode", JSON.stringify(isEdit));
+            this.handleIsEditCheckbox();
+        };
+
+        this.drawLine.onclick = () => {
+            chrome.tabs.query({active: true, currentWindow: true}, this.handleActiveWindow.bind(this))
+        }
+    }
+
+    handleActiveWindow(tabs: chrome.tabs.Tab[]){
+        chrome.tabs.executeScript(tabs[0].id,{file: "./draw.js"}, () => {
+
+        })
+    }
+
+    handleDraw(){
+        alert('hello');
+    }
+
+    handleIsEditCheckbox() {
+        let isEdit = JSON.parse(localStorage.getItem("isEditMode"));
+        if (isEdit) {
+            this.editModeEl.setAttribute("checked", "true");
+        } else {
+            this.editModeEl.removeAttribute("checked");
+        }
+    }
 }
 
 export default MainPopup;

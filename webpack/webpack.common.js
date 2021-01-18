@@ -4,7 +4,8 @@ const appDir = '../src/';
 module.exports = {
     entry: {
         background: path.join(__dirname, appDir + '/background/index.ts'),
-        popup: path.join(__dirname, appDir + '/popup/index.ts')
+        popup: path.join(__dirname, appDir + '/popup/index.ts'),
+        draw: path.join(__dirname, appDir + '/draw/index.ts')
     },
     module: {
         rules: [
@@ -19,7 +20,7 @@ module.exports = {
         extensions: ['.ts', '.tsx', '.js']
     },
     output: {
-        path: path.join(__dirname, '../dist/js'),
+        path: path.join(__dirname, '../dist/'),
         filename: '[name].js'
     }
 };
